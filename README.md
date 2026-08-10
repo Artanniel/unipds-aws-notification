@@ -91,3 +91,12 @@ target/unipds-aws-notification-1.0-SNAPSHOT.jar
    `target/unipds-aws-notification-1.0-SNAPSHOT.jar`
 4. Garanta que a **Execution Role** (Permissão IAM) da sua Lambda inclua a política `AmazonSSMReadOnlyAccess` para permitir a leitura dos parâmetros no Parameter Store.
 5. Adicione um **Gatilho (Trigger)** do Amazon S3 apontando para o seu bucket (`unipdi-bucket`) para eventos `All object create events`.
+
+---
+
+## 📸 Evidência de Configuração no AWS Console
+
+Abaixo está a demonstração visual da função Lambda `unipds-aws-notification` implantada na AWS com o gatilho do Amazon S3 configurado e o código empacotado (Fat JAR de ~30.6 MB):
+
+![Configuração da Função AWS Lambda e Gatilho S3](src/main/resources/Aws_Lambda_2026-08-09%2022-33-52.png)
+
