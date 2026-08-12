@@ -21,7 +21,7 @@ jobs:
               run: mvn clean package -DskipTests
 
             - name: Renomear o arquivo JAR
-              run: mv target/*.jar unipds-aws-notificacao-1.0.0.jar
+              run: mv target/unipds-aws-notification-*.jar unipds-aws-notificacao-1.0.0.jar
 
             - name: Configurar credenciais da AWS
               uses: aws-actions/configure-aws-credentials@v4
