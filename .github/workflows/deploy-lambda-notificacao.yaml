@@ -1,0 +1,43 @@
+#GitHub Workflow - YAML GitHub Workflow(github-workflow.json)
+name: Deploy app notificação na AWS
+on: [push]
+
+jobs:
+    build-and-deploy:
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout do projeto
+              uses: actions/checkout@v5
+
+            - name: Setup do Java 21
+              uses: actions/setup-java@v5
+              with:
+                  distribution: "temurin"
+                  java-version: "21"
+                  cache: "maven"
+
+            - name: Compilar o projeto
+              run: mvn clean package -DskipTests
+
+            - name: Renomear o arquivo JAR
+              run: mv target/*.jar unipds-aws-notificacao-1.0.0.jar
+
+            - name: Configurar credenciais da AWS
+              uses: aws-actions/configure-aws-credentials@v4
+              with:
+                  aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+                  aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+                  aws-region: sa-east-1
+
+            - name: Deploy na AWS Lambda
+              uses: aws-actions/lambda-publish@v4
+              with:
+                  function-name: unipds-notification
+                  package-type: Zip
+                  zip-file: target/unipds-aws-notificacao-1.0.0.jar
+                  handler: com.artantech.unipds.NotificationHandler::handleRequest
+              #run: |
+              #    aws lambda update-function-code \
+              #     --function-name unipds-notification \
+              #     --zip-file target/unipds-aws-notificacao-1.0.0.jar
