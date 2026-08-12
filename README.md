@@ -83,7 +83,7 @@ target/unipds-aws-notification-1.0-SNAPSHOT.jar
 
 ## 📦 Implantação na AWS Lambda
 
-1. Acesse o **Console AWS Lambda** e crie ou selecione a função `unipds-notification`.
+1. Acesse o **Console AWS Lambda** e crie ou selecione a função `unipds-aws-notification`.
 2. Em **Configuração do Handler**, defina:
    ```text
    com.artantech.unipds.NotificationHandler::handleRequest
@@ -103,7 +103,7 @@ O projeto conta com uma esteira de integração e entrega contínuas configurada
 2. Configuração do ambiente Java 21 (Temurin).
 3. Compilação do projeto e geração do Fat JAR (`mvn clean package -DskipTests`).
 4. Autenticação na AWS via credenciais configuradas.
-5. Deploy do pacote gerado diretamente na função AWS Lambda (`unipds-notification`).
+5. Deploy do pacote gerado diretamente na função AWS Lambda (`unipds-aws-notification`).
 
 ### Configuração de Secrets no GitHub:
 
@@ -121,7 +121,7 @@ Para garantir o funcionamento da esteira, defina os seguintes segredos em **Sett
 Abaixo estão os registros visuais das configurações da infraestrutura AWS e da esteira de CI/CD:
 
 ### 1. Configuração da Função AWS Lambda e Gatilho S3
-A imagem exibe a função Lambda `unipds-notification` pronta para uso, com o gatilho S3 atrelado ao bucket de upload do UniPDI e o código empacotado via Fat JAR (~30.6 MB):
+A imagem exibe a função Lambda `unipds-aws-notification` pronta para uso, com o gatilho S3 atrelado ao bucket de upload do UniPDI e o código empacotado via Fat JAR (~30.6 MB):
 
 ![Configuração da Função AWS Lambda e Gatilho S3](src/main/resources/images/Aws_Lambda_2026-08-09%2022-33-52.png)
 

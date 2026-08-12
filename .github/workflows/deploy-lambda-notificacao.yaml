@@ -33,6 +33,6 @@ jobs:
             - name: Deploy na AWS Lambda
               run: |
                   aws lambda update-function-code \
-                    --function-name unipds-notification \
+                    --function-name unipds-aws-notification \
                     --zip-file fileb://unipds-aws-notificacao-1.0.0.jar
 
