@@ -19,11 +19,9 @@ jobs:
 
             - name: Compilar o projeto
               run: mvn clean package -DskipTests
-              working-directory: ./unipds-aws-notification
 
             - name: Renomear o arquivo JAR
               run: mv target/*.jar unipds-aws-notificacao-1.0.0.jar
-              working-directory: ./unipds-aws-notification
 
             - name: Configurar credenciais da AWS
               uses: aws-actions/configure-aws-credentials@v4
@@ -33,13 +31,8 @@ jobs:
                   aws-region: sa-east-1
 
             - name: Deploy na AWS Lambda
-              uses: aws-actions/lambda-publish@v4
-              with:
-                  function-name: unipds-notification
-                  package-type: Zip
-                  zip-file: target/unipds-aws-notificacao-1.0.0.jar
-                  handler: com.artantech.unipds.NotificationHandler::handleRequest
-              #run: |
-              #    aws lambda update-function-code \
-              #     --function-name unipds-notification \
-              #     --zip-file target/unipds-aws-notificacao-1.0.0.jar
+              run: |
+                  aws lambda update-function-code \
+                    --function-name unipds-notification \
+                    --zip-file fileb://unipds-aws-notificacao-1.0.0.jar
+
