@@ -32,7 +32,21 @@ jobs:
 
             - name: Deploy na AWS Lambda
               run: |
-                  aws lambda update-function-code \
-                    --function-name unipds-aws-notification \
-                    --zip-file fileb://unipds-aws-notificacao-1.0.0.jar
+                  if aws lambda get-function --function-name unipds-aws-notification --region sa-east-1 >/dev/null 2>&1; then
+                    echo "Função encontrada na região sa-east-1. Efetuando deploy..."
+                    aws lambda update-function-code \
+                      --function-name unipds-aws-notification \
+                      --zip-file fileb://unipds-aws-notificacao-1.0.0.jar \
+                      --region sa-east-1
+                  elif aws lambda get-function --function-name unipds-aws-notification --region us-east-1 >/dev/null 2>&1; then
+                    echo "Função encontrada na região us-east-1. Efetuando deploy..."
+                    aws lambda update-function-code \
+                      --function-name unipds-aws-notification \
+                      --zip-file fileb://unipds-aws-notificacao-1.0.0.jar \
+                      --region us-east-1
+                  else
+                    echo "❌ ERRO: A função Lambda 'unipds-aws-notification' não foi encontrada em sa-east-1 nem em us-east-1."
+                    echo "Por favor, certifique-se de criar a função no Console da AWS na sua região configurada."
+                    exit 1
+                  fi
 
