@@ -99,11 +99,11 @@ target/unipds-aws-notification-1.0-SNAPSHOT.jar
 
 O projeto conta com uma esteira de integração e entrega contínuas configurada em `.github/workflows/deploy-lambda-notificacao.yaml`. A cada `push` efetuado no repositório, o GitHub Actions executa automaticamente:
 
-1. Checkout do código-fonte.
-2. Configuração do ambiente Java 21 (Temurin).
-3. Compilação do projeto e geração do Fat JAR (`mvn clean package -DskipTests`).
-4. Autenticação na AWS via credenciais configuradas.
-5. Deploy do pacote gerado diretamente na função AWS Lambda (`unipds-aws-notification`).
+1. **Checkout & Setup Java 21**: Clona o repositório e configura a JDK 21 (Temurin).
+2. **Build do Projeto**: Executa `mvn clean package -DskipTests` com o `maven-shade-plugin` para gerar o Fat/Uber JAR.
+3. **Seleção de Artefato**: Filtra e renomeia apenas o Fat JAR gerado (`target/unipds-aws-notification-*.jar`), ignorando arquivos temporários (`original-*.jar`).
+4. **Autenticação AWS**: Conecta-se à AWS via `aws-actions/configure-aws-credentials@v4` utilizando as credenciais salvas nos Secrets do repositório.
+5. **Detecção & Deploy Dinâmico**: Identifica automaticamente a região onde a função `unipds-aws-notification` está ativa (`sa-east-1` ou `us-east-1`) e atualiza o código via AWS CLI (`aws lambda update-function-code` com o prefixo binário `fileb://`).
 
 ### Configuração de Secrets no GitHub:
 
@@ -118,7 +118,7 @@ Para garantir o funcionamento da esteira, defina os seguintes segredos em **Sett
 
 ## 📸 Evidências Visuais e de Configuração
 
-Abaixo estão os registros visuais das configurações da infraestrutura AWS e da esteira de CI/CD:
+Abaixo estão os registros visuais das configurações da infraestrutura AWS e das etapas da esteira automatizada de CI/CD:
 
 ### 1. Configuração da Função AWS Lambda e Gatilho S3
 A imagem exibe a função Lambda `unipds-aws-notification` pronta para uso, com o gatilho S3 atrelado ao bucket de upload do UniPDI e o código empacotado via Fat JAR (~30.6 MB):
@@ -126,8 +126,19 @@ A imagem exibe a função Lambda `unipds-aws-notification` pronta para uso, com 
 ![Configuração da Função AWS Lambda e Gatilho S3](src/main/resources/images/Aws_Lambda_2026-08-09%2022-33-52.png)
 
 ### 2. Configuração de Secrets no GitHub Actions
-A imagem abaixo demonstra as credenciais da AWS salvas de forma segura no repositório do GitHub para automação do deploy via GitHub Actions:
+A imagem abaixo demonstra as credenciais da AWS (`AWS_ACCESS_KEY_ID` e `AWS_SECRET_ACCESS_KEY`) salvas de forma segura em **Repository Secrets** no GitHub:
 
 ![Configuração de Repository Secrets no GitHub Actions](src/main/resources/images/ConfigSecretsInGitHubActions.png)
+
+### 3. Execução dos Workflows no GitHub Actions
+Demonstração dos disparos e histórico de execuções automatizadas da esteira de CI/CD na aba Actions do repositório:
+
+![Execução dos Workflows no GitHub Actions](src/main/resources/images/gitHubActionspng.png)
+
+### 4. Pipeline de Build e Deploy Concluído com Sucesso
+Detalhamento das etapas do job `build-and-deploy` (Checkout, Setup Java 21, Compilação Maven, Autenticação AWS e Deploy na Lambda) finalizadas com sucesso:
+
+![Pipeline de CI/CD Concluído com Sucesso](src/main/resources/images/pipelineGitHubActionspng.png)
+
 
 
